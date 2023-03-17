@@ -1,4 +1,5 @@
-import { gql } from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
+import { GetMovieResponse, GetMoviesResponse, GetStudiosAndDirectorResponse } from '../interfaces/interface'
 
 const getDirectors = gql`
     query getDirectors {
@@ -9,7 +10,7 @@ const getDirectors = gql`
     }
 `
 
-const getStudiosAndDirector = gql`
+const GET_STUDIO_AND_DIRECTOR = gql`
     query getStudiosAndDirector {
         getStudios {
             _id
@@ -22,7 +23,7 @@ const getStudiosAndDirector = gql`
     }
 `
 
-const getMovies = gql`
+export const GET_MOVIES = gql`
     query getMovies {
         getMovies {
             _id
@@ -41,7 +42,7 @@ const getMovies = gql`
     }
 `
 
-const getMovie = gql`
+export const GET_MOVIE = gql`
     query getMovie($id: String!) {
         getMovie(id: $id) {
             _id
@@ -60,4 +61,14 @@ const getMovie = gql`
     }
 `
 
-export { getDirectors, getMovie, getMovies, getStudiosAndDirector }
+export function useGetMovies() {
+    return useQuery<GetMoviesResponse>(GET_MOVIES)
+}
+
+export function useGetMovie(id: string | null) {
+    return useQuery<GetMovieResponse>(GET_MOVIE, { variables: {id}, skip: !id})
+}
+
+export function useGetStudiosAndDirector() {
+    return useQuery<GetStudiosAndDirectorResponse>(GET_STUDIO_AND_DIRECTOR)
+}
